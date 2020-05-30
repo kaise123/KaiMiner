@@ -294,12 +294,14 @@ local function dropAndCollect()
         turtle.placeDown()
         for slot = 6, 16 do
             turtle.select(slot)
-            ItemDetails = turtle.getItemDetail()
+            if turtle.getItemCount() > 0 then 
+                ItemDetails = turtle.getItemDetail()
                 if ItemDetails.name == "minecraft:cobblestone" then 
                     turtle.drop() -- If the slot contains cobble, drop it on the ground.
                 else
                     turtle.dropDown() -- Drop all non-cobblestone items into the chest below me.
                     sleep(1.5)
+                end
             end
         end
         turtle.select(3)  -- Reselect the empty slot to put the EnderChest back into.
