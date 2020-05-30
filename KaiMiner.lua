@@ -33,7 +33,7 @@ local NeedFuel = 0                              -- If Fuel Need Then 1 if not Th
 local Error = 0                                 -- 0 = No Error and 1 = Error
 local direction = 0                             -- 0 = Left and 1 = Right
 local oresMined = 0                             -- Pre-Define that no ores have been found yet.
-local Blacklist = 0                             -- 0 = Whitelist and 1 = Blacklist mode.
+local useBlacklist = 0                             -- 0 = Whitelist and 1 = Blacklist mode.
 
 -- Whitelist of blocks to mine out of walls/ceiling/floor when in whitelist mode:
 local mineWhitelist = {
@@ -181,7 +181,7 @@ end
 -- Detects if facing an ore present in the mineWhitelist table.
 local function detectOres()
     local blockPresent,blockInfo = turtle.inspect() -- Check the block we are facing. Store if there is a block (blockPresent) and the details of the block (blockInfo)
-    if Blacklist == 0 and blockPresent and mineWhitelist[blockInfo.name] then -- If not using the blacklisting function, there IS a block there, and it is on the whitelist table
+    if useBlacklist == 0 and blockPresent and mineWhitelist[blockInfo.name] then -- If not using the blacklisting function, there IS a block there, and it is on the whitelist table
         oresMined = oresMined + 1
         term.setTextColor(colors.purple)
         print("INFO: Found", oresMined, "ores so far")
@@ -189,10 +189,10 @@ local function detectOres()
         turtle.select(4)
 		turtle.dig()
 		fill() -- Fill in the hole we just dug.
-    elseif Blacklist == 1 and blockPresent and mineBlacklist(blockInfo.name) then -- If we ARE using the blacklisting function, there IS a block there, and it IS on the blacklist
+    elseif useBlacklist == 1 and blockPresent and mineBlacklist(blockInfo.name) then -- If we ARE using the blacklisting function, there IS a block there, and it IS on the blacklist
         -- Do nothing - We don't want blacklisted blocks.
         fill() -- We will place cobble anyway - in case there is lava/water to fill in.
-    elseif Blacklist == 1 and blockPresent then -- If we ARE using the blacklisting function, there IS a block there, and it is NOT on the blacklist
+    elseif useBlacklist == 1 and blockPresent then -- If we ARE using the blacklisting function, there IS a block there, and it is NOT on the blacklist
         oresMined = oresMined + 1
         term.setTextColor(colors.purple)
         print("INFO: Found", oresMined, "ores so far")
