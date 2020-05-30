@@ -1,11 +1,12 @@
 --[[
-This version: 4.10
+This version: 4.11
 30/05/2020
 
 Changelog:
 - 4.00 - Total reformat/redone code.
 - 4.01 - Working release - Fix spelling mistakes, typos, etc
 - 4.10 - Add in blacklisting option to mine all blocks NOT on a list, rather than whitelist (ONLY mine blocks that are on a list)
+- 4.11 - Drop items before return trip. Thought I had already implemented this but apparently not.
 
 To-Do List:
 - Use advanced turtle monitor to constantly show certain stats on screen
@@ -189,7 +190,7 @@ local function detectOres()
         turtle.select(4)
 		turtle.dig()
 		fill() -- Fill in the hole we just dug.
-    elseif useBlacklist == 1 and blockPresent and mineBlacklist(blockInfo.name) then -- If we ARE using the blacklisting function, there IS a block there, and it IS on the blacklist
+    elseif useBlacklist == 1 and blockPresent and mineBlacklist[blockInfo.name] then -- If we ARE using the blacklisting function, there IS a block there, and it IS on the blacklist
         -- Do nothing - We don't want blacklisted blocks.
         fill() -- We will place cobble anyway - in case there is lava/water to fill in.
     elseif useBlacklist == 1 and blockPresent then -- If we ARE using the blacklisting function, there IS a block there, and it is NOT on the blacklist
@@ -207,18 +208,26 @@ local function detectOres()
 end
 
 local function detectOresDown()
-    local blockPresent,blockInfo = turtle.inspectDown()
-    if blockPresent and mineWhitelist[blockInfo.name] then
+    local blockPresent,blockInfo = turtle.inspectDown() -- Check the block we are facing. Store if there is a block (blockPresent) and the details of the block (blockInfo)
+    if useBlacklist == 0 and blockPresent and mineWhitelist[blockInfo.name] then -- If not using the blacklisting function, there IS a block there, and it is on the whitelist table
         oresMined = oresMined + 1
         term.setTextColor(colors.purple)
         print("INFO: Found", oresMined, "ores so far")
         term.setTextColor(colors.white)
         turtle.select(4)
 		turtle.digDown()
-		fillDown()
-    elseif IsBlock then
-		-- A block is present - But not in the 'mineWhitelist' table. We will place cobble anyway - in case there is lava/water to fill in.
-		fillDown()
+		fillDown() -- Fill in the hole we just dug.
+    elseif useBlacklist == 1 and blockPresent and mineBlacklist[blockInfo.name] then -- If we ARE using the blacklisting function, there IS a block there, and it IS on the blacklist
+        -- Do nothing - We don't want blacklisted blocks.
+        fillDown() -- We will place cobble anyway - in case there is lava/water to fill in.
+    elseif useBlacklist == 1 and blockPresent then -- If we ARE using the blacklisting function, there IS a block there, and it is NOT on the blacklist
+        oresMined = oresMined + 1
+        term.setTextColor(colors.purple)
+        print("INFO: Found", oresMined, "ores so far")
+        term.setTextColor(colors.white)
+        turtle.select(4)
+		turtle.digDown()
+		fillDown() -- Fill in the hole we just dug.
     else
         -- No block is present - Fill the hole with Cobblestone.
         fillDown()
@@ -226,18 +235,26 @@ local function detectOresDown()
 end
 
 local function detectOresUp()
-    local blockPresent,blockInfo = turtle.inspectUp()
-    if blockPresent and mineWhitelist[blockInfo.name] then
+    local blockPresent,blockInfo = turtle.inspectUp() -- Check the block we are facing. Store if there is a block (blockPresent) and the details of the block (blockInfo)
+    if useBlacklist == 0 and blockPresent and mineWhitelist[blockInfo.name] then -- If not using the blacklisting function, there IS a block there, and it is on the whitelist table
         oresMined = oresMined + 1
         term.setTextColor(colors.purple)
         print("INFO: Found", oresMined, "ores so far")
         term.setTextColor(colors.white)
         turtle.select(4)
 		turtle.digUp()
-		fillUp()
-    elseif IsBlock then
-		-- A block is present - But not in the 'mineWhitelist' table. We will place cobble anyway - in case there is lava/water to fill in.
-		fillUp()
+		fillUp() -- Fill in the hole we just dug.
+    elseif useBlacklist == 1 and blockPresent and mineBlacklist[blockInfo.name] then -- If we ARE using the blacklisting function, there IS a block there, and it IS on the blacklist
+        -- Do nothing - We don't want blacklisted blocks.
+        fillUp() -- We will place cobble anyway - in case there is lava/water to fill in.
+    elseif useBlacklist == 1 and blockPresent then -- If we ARE using the blacklisting function, there IS a block there, and it is NOT on the blacklist
+        oresMined = oresMined + 1
+        term.setTextColor(colors.purple)
+        print("INFO: Found", oresMined, "ores so far")
+        term.setTextColor(colors.white)
+        turtle.select(4)
+		turtle.digUp()
+		fillUp() -- Fill in the hole we just dug.
     else
         -- No block is present - Fill the hole with Cobblestone.
         fillUp()
@@ -269,47 +286,45 @@ local function checkSidesBack()
 end
 
 local function dropAndCollect()
-    if turtle.getItemCount(16) > 0 then -- If slot 16 contains an item, the turtle is full. Drop slots 6 to 16 into chest.
-        if slotDumpChest > 0 then -- If we still have a dump chest to fill
-            turtle.select(3)
-            turtle.digDown()
-            term.setTextColor(colors.purple)
-            print("INFO: Inventory full. Dropping into chest.")
-            term.setTextColor(colors.white)
-            turtle.placeDown()
-            for slot = 6, 16 do
-                turtle.select(slot)
-                ItemDetails = turtle.getItemDetail()
-                    if ItemDetails.name == "minecraft:cobblestone" then 
-                        turtle.drop() -- If the slot contains cobble, drop it on the ground.
-                    else
-                        turtle.dropDown() -- Drop all non-cobblestone items into the chest below me.
-                        sleep(1.5)
-                end
+    if slotDumpChest > 0 then -- If we still have a dump chest to fill
+        turtle.select(3)
+        turtle.digDown()
+        term.setTextColor(colors.purple)
+        print("INFO: Inventory full. Dropping into chest.")
+        term.setTextColor(colors.white)
+        turtle.placeDown()
+        for slot = 6, 16 do
+            turtle.select(slot)
+            ItemDetails = turtle.getItemDetail()
+                if ItemDetails.name == "minecraft:cobblestone" then 
+                    turtle.drop() -- If the slot contains cobble, drop it on the ground.
+                else
+                    turtle.dropDown() -- Drop all non-cobblestone items into the chest below me.
+                    sleep(1.5)
             end
-            turtle.select(3)  -- Reselect the empty slot to put the EnderChest back into.
-            turtle.digDown()  -- Dig the EnderChest back up.
-            sleep(2)
-            term.setTextColor(colors.purple)
-            print("INFO: Collecting torches")
-            term.setTextColor(colors.white)
-            torchesNeeded = 0 -- Reset torches needed to 0
-            turtle.select(2) -- Select slot 2, this should contain the crate or EnderChest full of only torches.
-            turtle.placeDown()
-            turtle.select(1) -- Select slot for torches...
-            torchesNeeded = 64 - turtle.getItemCount(1) -- Count how many torches are left and subtract from 64, so we know how many to collect.
-            turtle.suckDown(torchesNeeded) -- Pull only enough torches to refill slot 1.
-            term.setTextColor(colors.purple)
-            print("INFO: Finished. Collected", torchesNeeded, "torches.")
-            term.setTextColor(colors.white)
-            turtle.select(2) -- Select empty slot for Torch storage EnderChest
-            turtle.digDown()  -- And pick the Torch Storage EnderChest back up again.
-            turtle.select(5)
-            turtle.placeDown()
-            turtle.select(4)
-        else
-            error("Turtle run out of Chests. Quitting")
         end
+        turtle.select(3)  -- Reselect the empty slot to put the EnderChest back into.
+        turtle.digDown()  -- Dig the EnderChest back up.
+        sleep(2)
+        term.setTextColor(colors.purple)
+        print("INFO: Collecting torches")
+        term.setTextColor(colors.white)
+        torchesNeeded = 0 -- Reset torches needed to 0
+        turtle.select(2) -- Select slot 2, this should contain the crate or EnderChest full of only torches.
+        turtle.placeDown()
+        turtle.select(1) -- Select slot for torches...
+        torchesNeeded = 64 - turtle.getItemCount(1) -- Count how many torches are left and subtract from 64, so we know how many to collect.
+        turtle.suckDown(torchesNeeded) -- Pull only enough torches to refill slot 1.
+        term.setTextColor(colors.purple)
+        print("INFO: Finished. Collected", torchesNeeded, "torches.")
+        term.setTextColor(colors.white)
+        turtle.select(2) -- Select empty slot for Torch storage EnderChest
+        turtle.digDown()  -- And pick the Torch Storage EnderChest back up again.
+        turtle.select(5)
+        turtle.placeDown()
+        turtle.select(4)
+    else
+        error("Turtle run out of Chests. Quitting")
     end
 end
 
@@ -341,13 +356,16 @@ local function mineForward()
 				error("Ran out of torches. Quitting")
 			end
         end
-        dropAndCollect()
+        if turtle.getItemCount(16) > 0 then -- If slot 16 contains an item, the turtle is full. Drop slots 6 to 16 into chest.
+            dropAndCollect()
+        end
         reFuel()
 	until turtleForward == 0
 end
 
 -- Turn around and go up 1 level in preperation for returning down the strip to the original hallway.
 local function prepareForReturn()
+    dropAndCollect() -- Drop items into chest - To keep inventory room for items found on return trip.
     checkSides()
     turtle.up()
     checkSidesBack()
