@@ -220,14 +220,14 @@ local function detectOresUp()
         print("INFO: Found", oresMined, "ores so far")
         term.setTextColor(colors.white)
         turtle.select(4)
-		turtle.digDown()
-		fillDown()
+		turtle.digUp()
+		fillUp()
     elseif IsBlock then
 		-- A block is present - But not in the 'mineWhitelist' table. We will place cobble anyway - in case there is lava/water to fill in.
-		fillDown()
+		fillUp()
     else
         -- No block is present - Fill the hole with Cobblestone.
-        fillDown()
+        fillUp()
     end
 end
 
