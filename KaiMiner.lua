@@ -47,6 +47,33 @@ local mineBlacklist = {
     ["minecraft:cobblestone"] = true,
 }
 
+local function reFuel()
+    repeat
+        if turtle.getFuelLevel() == "unlimited" then 
+            term.setTextColor(colors.purple)
+            print("INFO: Fuel not needed (Unlimited)")
+            term.setTextColor(colors.white)
+			Needfuel = 0
+        elseif turtle.getFuelLevel() < 200 then
+            CurrentFuelLevel = turtle.getFuelLevel()
+            term.setTextColor(colors.purple)
+            print("INFO: Refuelling. Fuel level was:", CurrentFuelLevel)
+            term.setTextColor(colors.white)
+            turtle.select(4)
+            CoalRemaining = turtle.getItemCount(4) -- Count remaining Coal in slot 4
+            CoalToUse = CoalRemaining - 1 -- Take one away - We want to leave one coal in slot 4 so future Coal we mine is collected here first.
+			turtle.refuel(CoalToUse) -- Refuel with all the coal in the slot minus one.
+			CurrentFuelLevel = turtle.getFuelLevel()
+            term.setTextColor(colors.purple)
+            print("INFO: Refueled. Level is now:", CurrentFuelLevel)
+            term.setTextColor(colors.white)
+			Needfuel = 1
+		elseif NeedFuel == 1 then
+			Needfuel = 0
+		end
+    until NeedFuel == 0
+end
+
 -- Check the appropriate item is in each slot, refuel, etc
 local function checkSlots()
     if slotItemTorch == 0 then
@@ -91,33 +118,6 @@ local function checkSlots()
     end
     term.setTextColor(colors.white) -- Reset terminal colour to white.
     reFuel()
-end
-
-local function reFuel()
-    repeat
-        if turtle.getFuelLevel() == "unlimited" then 
-            term.setTextColor(colors.purple)
-            print("INFO: Fuel not needed (Unlimited)")
-            term.setTextColor(colors.white)
-			Needfuel = 0
-        elseif turtle.getFuelLevel() < 200 then
-            CurrentFuelLevel = turtle.getFuelLevel()
-            term.setTextColor(colors.purple)
-            print("INFO: Refuelling. Fuel level was:", CurrentFuelLevel)
-            term.setTextColor(colors.white)
-            turtle.select(4)
-            CoalRemaining = turtle.getItemCount(4) -- Count remaining Coal in slot 4
-            CoalToUse = CoalRemaining - 1 -- Take one away - We want to leave one coal in slot 4 so future Coal we mine is collected here first.
-			turtle.refuel(CoalToUse) -- Refuel with all the coal in the slot minus one.
-			CurrentFuelLevel = turtle.getFuelLevel()
-            term.setTextColor(colors.purple)
-            print("INFO: Refueled. Level is now:", CurrentFuelLevel)
-            term.setTextColor(colors.white)
-			Needfuel = 1
-		elseif NeedFuel == 1 then
-			Needfuel = 0
-		end
-    until NeedFuel == 0
 end
 
 -- Re-Check slots when called to update stored values of items in each slot.
