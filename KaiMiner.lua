@@ -78,7 +78,7 @@ end
 local function checkSlots()
     if slotItemTorch == 0 then
         term.setTextColor(colors.red)
-        print("Slot 1: missing torches.")
+        print("Slot 1: Missing torches.")
         Error = 1
     else
         term.setTextColor(colors.lime)
@@ -86,7 +86,7 @@ local function checkSlots()
     end
     if slotTorchChest == 0 then
         term.setTextColor(colors.red)
-        print("Slot 2: missing torches EnderChest")
+        print("Slot 2: Missing torches EnderChest")
         Error = 1
     else
         term.setTextColor(colors.lime)
@@ -94,7 +94,7 @@ local function checkSlots()
     end
     if slotDumpChest == 0 then
         term.setTextColor(colors.red)
-        print("Slot 3: missing item dump EnderChest")
+        print("Slot 3: Missing item dump EnderChest")
         Error = 1
     else
         term.setTextColor(colors.lime)
@@ -102,7 +102,7 @@ local function checkSlots()
     end
     if slotItemFuel == 0 then
         term.setTextColor(colors.red)
-        print("Slot 4: missing Coal")
+        print("Slot 4: Missing Coal")
         Error = 1
     else
         term.setTextColor(colors.lime)
@@ -474,6 +474,9 @@ direction = tonumber(input2)
 print("How many shafts to dig?")
 input3 = io.read()
 mineCount = tonumber(input3)
+print("Blacklist or Whitelist? 0 = WL, 1 = BL")
+input4 = io.read()
+useBlacklist = tonumber(input4)
 term.setTextColor(colors.purple)
 print("INFO: Digging", input3, "shafts")
 print("Each will be", input, "long")
@@ -483,7 +486,8 @@ if Error == 1 then
 	repeat
 		sleep(10)
 		reCheckSlots()
-		checkSlots()
+        checkSlots()
+        print(" ")
 	until Error == 0
 end
 begin()
