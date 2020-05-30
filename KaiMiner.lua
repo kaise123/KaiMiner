@@ -234,7 +234,6 @@ end
 -- Physically check above, below, left and right for blocks to mine.
 local function checkSides()
     detectOresDown()
-    detectOresUp()
     turtle.turnLeft()
     detectOres()
     turtle.turnRight()
