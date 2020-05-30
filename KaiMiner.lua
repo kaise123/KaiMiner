@@ -1,15 +1,20 @@
 --[[
-This version: 4.0
+This version: 4.10
 30/05/2020
 
 Changelog:
-- 4.0 - Total reformat/redone code.
+- 4.00 - Total reformat/redone code.
+- 4.01 - Working release - Fix spelling mistakes, typos, etc
+- 4.10 - Add in blacklisting option to mine all blocks NOT on a list, rather than whitelist (ONLY mine blocks that are on a list)
 
 To-Do List:
-- ?
+- Use advanced turtle monitor to constantly show certain stats on screen
+- Persistent logging (Save stats to disk)
+- Check the CORRECT item is in each slot before starting, rather than just checking that any item is there.
 
 Known Bugs:
 - ?
+
 --]] 
 
 -- Variables:
@@ -175,18 +180,26 @@ end
 -- Ore Detection
 -- Detects if facing an ore present in the mineWhitelist table.
 local function detectOres()
-    local blockPresent,blockInfo = turtle.inspect()
-    if blockPresent and mineWhitelist[blockInfo.name] then
+    local blockPresent,blockInfo = turtle.inspect() -- Check the block we are facing. Store if there is a block (blockPresent) and the details of the block (blockInfo)
+    if Blacklist == 0 and blockPresent and mineWhitelist[blockInfo.name] then -- If not using the blacklisting function, there IS a block there, and it is on the whitelist table
         oresMined = oresMined + 1
         term.setTextColor(colors.purple)
         print("INFO: Found", oresMined, "ores so far")
         term.setTextColor(colors.white)
         turtle.select(4)
 		turtle.dig()
-		fill()
-    elseif IsBlock then
-		-- A block is present - But not in the 'mineWhitelist' table. We will place cobble anyway - in case there is lava/water to fill in.
-		fill()
+		fill() -- Fill in the hole we just dug.
+    elseif Blacklist == 1 and blockPresent and mineBlacklist(blockInfo.name) then -- If we ARE using the blacklisting function, there IS a block there, and it IS on the blacklist
+        -- Do nothing - We don't want blacklisted blocks.
+        fill() -- We will place cobble anyway - in case there is lava/water to fill in.
+    elseif Blacklist == 1 and blockPresent then -- If we ARE using the blacklisting function, there IS a block there, and it is NOT on the blacklist
+        oresMined = oresMined + 1
+        term.setTextColor(colors.purple)
+        print("INFO: Found", oresMined, "ores so far")
+        term.setTextColor(colors.white)
+        turtle.select(4)
+		turtle.dig()
+		fill() -- Fill in the hole we just dug.
     else
         -- No block is present - Fill the hole with Cobblestone.
         fill()
@@ -322,7 +335,7 @@ local function mineForward()
 				turtle.place()
 				turtle.turnLeft()
 				turtle.turnLeft()
-				onlight = onlight - 13
+				torchSpace = torchSpace - 13
 				turtle.select(4)
 			else
 				error("Ran out of torches. Quitting")
