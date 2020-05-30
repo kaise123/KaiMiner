@@ -444,25 +444,25 @@ function begin()
         resetCounters()
     until mineCount == 0
     if mineCount == 0 then
-        term.setTextColor(color.blue)
+        term.setTextColor(colors.blue)
         print("INFO: Mining complete!")
-        term.setTextColor(color.white)
+        term.setTextColor(colors.white)
     end
 end
 
 -- Run each step in the program:
 print("Begin Program.")
 print("= = =")
-term.setTextColor(color.lightBlue)
+term.setTextColor(colors.lightBlue)
 print("Please fill the inventory as follows:")
 print("Slot 1: ~10+ Torches")
 print("Slot 2: Torches Enderchest")
 print("Slot 3: Item output EnderChest")
 print("Slot 4: ~64 Coal")
 print("Slot 5: ~64 Cobblestone")
-term.setTextColor(color.white)
+term.setTextColor(colors.white)
 print("= = =")
-term.setTextColor(color.lightGray)
+term.setTextColor(colors.lightGray)
 print("How long should each shaft be?")
 input = io.read()
 distance = tonumber(input)
@@ -475,10 +475,10 @@ direction = tonumber(input2)
 print("How many shafts to dig?")
 input3 = io.read()
 MineTimes = tonumber(input3)
-term.setTextColor(color.purple)
+term.setTextColor(colors.purple)
 print("INFO: Digging ", input3, " shafts")
 print("Each will be ", input, " long")
-term.setTextColor(color.white)
+term.setTextColor(colors.white)
 checkSlots()
 if Error == 1 then 
 	repeat
