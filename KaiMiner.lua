@@ -123,7 +123,6 @@ local function checkSlots()
         print("Slot 5: Cobblestone found!")
     end
     term.setTextColor(colors.white) -- Reset terminal colour to white.
-    reFuel()
 end
 
 -- Re-Check slots when called to update stored values of items in each slot.
@@ -467,6 +466,7 @@ end
 
 function begin()
     repeat
+        reFuel()
         mineForward()
         prepareForReturn()
         returnBack()
