@@ -1,3 +1,5 @@
 fs.delete("KaiMiner")
+sleep(2)
 shell.run("wget", "https://raw.githubusercontent.com/kaise123/KaiMiner/master/KaiMiner.lua", "KaiMiner")
+sleep(2)
 shell.run("KaiMiner")
