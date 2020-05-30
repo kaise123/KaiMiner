@@ -348,7 +348,8 @@ local function returnBack()
 	repeat
 		if turtle.forward() then -- If we moved forward
 			turtleBack = turtleBack - 1
-			checkSidesBack()
+            checkSidesBack()
+        else
 			end
 		end
 		if turtle.detect() then -- Sometimes sand and gravel can happen and this will fix it
