@@ -90,7 +90,7 @@ local function checkSlots()
         Error = 1
     else
         term.setTextColor(colors.lime)
-        print("Slot 2: torches EnderChest found!")
+        print("Slot 2: Torches EnderChest found!")
     end
     if slotDumpChest == 0 then
         term.setTextColor(colors.red)
@@ -415,7 +415,7 @@ local function nextMine()
 		turtle.turnRight()
 		turtle.down()
         term.setTextColor(colors.purple)
-        print("INFO: Remaining Strips: ", mineCount)
+        print("INFO: Remaining Strips:", mineCount)
         term.setTextColor(colors.white)
 	end
 	if mineCount == 0 then
@@ -474,10 +474,10 @@ input2 = io.read()
 direction = tonumber(input2)
 print("How many shafts to dig?")
 input3 = io.read()
-MineTimes = tonumber(input3)
+mineCount = tonumber(input3)
 term.setTextColor(colors.purple)
-print("INFO: Digging ", input3, " shafts")
-print("Each will be ", input, " long")
+print("INFO: Digging", input3, "shafts")
+print("Each will be", input, "long")
 term.setTextColor(colors.white)
 checkSlots()
 if Error == 1 then 
