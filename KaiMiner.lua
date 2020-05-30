@@ -179,7 +179,7 @@ local function detectOres()
     if blockPresent and mineWhitelist[blockInfo.name] then
         oresMined = oresMined + 1
         term.setTextColor(colors.purple)
-        print("INFO: Found", OresFoundTotal, "ores so far")
+        print("INFO: Found", oresMined, "ores so far")
         term.setTextColor(colors.white)
         turtle.select(4)
 		turtle.dig()
@@ -198,7 +198,7 @@ local function detectOresDown()
     if blockPresent and mineWhitelist[blockInfo.name] then
         oresMined = oresMined + 1
         term.setTextColor(colors.purple)
-        print("INFO: Found", OresFoundTotal, "ores so far")
+        print("INFO: Found", oresMined, "ores so far")
         term.setTextColor(colors.white)
         turtle.select(4)
 		turtle.digDown()
@@ -217,7 +217,7 @@ local function detectOresUp()
     if blockPresent and mineWhitelist[blockInfo.name] then
         oresMined = oresMined + 1
         term.setTextColor(colors.purple)
-        print("INFO: Found", OresFoundTotal, "ores so far")
+        print("INFO: Found", oresMined, "ores so far")
         term.setTextColor(colors.white)
         turtle.select(4)
 		turtle.digDown()
@@ -338,9 +338,9 @@ end
 local function prepareForReturn()
     checkSides()
     turtle.up()
-    checkSides()
-    turtle.Left()
-    turtle.Left()
+    checkSidesBack()
+    turtle.turnLeft()
+    turtle.turnLeft()
 end
 
 -- Return down strip.
