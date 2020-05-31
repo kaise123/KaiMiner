@@ -38,17 +38,17 @@ local useBlacklist = 0                             -- 0 = Whitelist and 1 = Blac
 
 -- Whitelist of blocks to mine out of walls/ceiling/floor when in whitelist mode:
 local mineWhitelist = {
-	["minecraft:coal_ore"] = true,
-	["minecraft:diamond_ore"] = true,
-	["minecraft:gold_ore"] = true,
-	["minecraft:iron_ore"] = true,
-	["minecraft:lapis_ore"] = true,
-	["thermalfoundation:ore"] = true,
+    ["minecraft:coal_ore"] = true,
+    ["minecraft:diamond_ore"] = true,
+    ["minecraft:gold_ore"] = true,
+    ["minecraft:iron_ore"] = true,
+    ["minecraft:lapis_ore"] = true,
+    ["thermalfoundation:ore"] = true,
 }
 
 -- Blacklist of blocks to NOT mine out of walls/ceiling/floor when in blacklist mode:
 local mineBlacklist = {
-	["minecraft:stone"] = true,
+    ["minecraft:stone"] = true,
     ["minecraft:dirt"] = true,
     ["minecraft:cobblestone"] = true,
 }
@@ -523,4 +523,5 @@ if Error == 1 then
         print(" ")
 	until Error == 0
 end
+
 begin()
