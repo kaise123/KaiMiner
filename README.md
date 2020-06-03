@@ -4,6 +4,7 @@ This is a project to create simple but efficient mining program.
 The code was originally based upon @johnneijzen's 'John Turtle Programs' strip miner, but I have basically completely re-written the code since then.
 
 Notable features:
+
 1.) Fast. Due to the turtle moving along the bottom of the strip, and then coming back along the top, the turtle is able to complete strips faster and with less fuel due to less movement.
   The downside of this feature is that torches may be knocked off of the floor if Lava or Water is encoutered.
   
@@ -21,5 +22,6 @@ The second EnderChest is designed to be filled with torches - so the turtle can 
 
 Either of these chests could also be replaced with storage containers that allow being picked up without losing their inventory contents.
 
+The turtle will begin by informing you of the inventory layout and wait for you to place the items correctly. It will also query the length, quantity and direction of the strips it will mine.
 
 This is the first time I have used Lua - but I have tried to keep the code relatively well formatted and leave detailed comments so others can easily understand how it works.
